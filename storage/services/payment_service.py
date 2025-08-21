@@ -39,7 +39,8 @@ class PaymentService:
         )
         callback_url = getattr(settings, 'PAYMENT_CALLBACK_URL', '')
         if not callback_url:
-            callback_url = 'http://localhost:5173/storage'  # Fallback to frontend URL
+            # callback_url = 'http://localhost:5173/storage'  # Fallback to frontend URL
+            callback_url = (f'{settings.FRONTEND_URL}/storage')  # Fallback to frontend URL
         # Prepare payment data for Paystack
 
 

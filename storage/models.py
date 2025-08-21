@@ -4,13 +4,15 @@ from django.core.validators import MinValueValidator
 from decimal import Decimal
 import uuid
 from django.contrib.auth import get_user_model
+from cloudinary.models import CloudinaryField
 
 User = get_user_model()
 
 class StoragePlan(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     product_name = models.CharField(max_length=200)
-    product_image = models.ImageField(upload_to='storage_plans/', blank=True, null=True)
+    # product_image = models.ImageField(upload_to='storage_plans/', blank=True, null=True)
+    product_image = CloudinaryField('image', blank=True, null=True)
     description = models.TextField()
     buying_price_per_bag = models.DecimalField(
         max_digits=12, 
@@ -219,7 +221,8 @@ class StorageUpdate(models.Model):
     title = models.CharField(max_length=200)
     message = models.TextField()
     current_market_price = models.DecimalField(max_digits=12, decimal_places=2, blank=True, null=True)
-    image = models.ImageField(upload_to='storage_updates/', blank=True, null=True)
+    # image = models.ImageField(upload_to='storage_updates/', blank=True, null=True)
+    image = CloudinaryField('image', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:

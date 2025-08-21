@@ -10,6 +10,13 @@ class ProductSerializer(serializers.ModelSerializer):
             'image': {'required': False}  # Make image not required for updates
         }
 
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        request = self.context.get('request')
+        if request and instance.image:
+            data['image'] = request.build_absolute_uri(instance.image.url)
+        return data
+
     def update(self, instance, validated_data):
         # Handle the image separately
         image = validated_data.pop('image', None)

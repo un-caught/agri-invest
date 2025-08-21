@@ -25,6 +25,8 @@ from investments.models import Investment
 from django.db.models import Sum, Count, Q
 from django.db.models.functions import Coalesce
 
+from django.conf import settings
+
 
 
 @api_view(['GET'])
@@ -178,11 +180,13 @@ def custom_activation(request, uid, token):
         print(f"User {user.email} activated successfully")
         
         # Success - redirect to frontend login with success message
-        return redirect('http://localhost:5173/login?activated=true')
+        # return redirect('http://localhost:5173/login?activated=true')
+        return redirect(f'{settings.FRONTEND_URL}/login?activated=true')
             
     except Exception as e:
         print(f"Activation error: {e}")
-        return redirect('http://localhost:5173/login?activated=false')
+        # return redirect('http://localhost:5173/login?activated=false')
+        return redirect(f'{settings.FRONTEND_URL}/login?activated=false')
 
 class NotificationViewSet(viewsets.ModelViewSet):
     serializer_class = NotificationSerializer
@@ -611,3 +615,9 @@ def bank_account(request):
             {'error': 'An unexpected error occurred'},
             status=status.HTTP_500_INTERNAL_SERVER_ERROR
         )
+    
+
+from django.views.generic import TemplateView
+
+class FrontendAppView(TemplateView):
+    template_name = "index.html"

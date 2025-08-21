@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -69,7 +70,7 @@ ROOT_URLCONF = 'agri_invest.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, "users/templates")],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -133,7 +134,33 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+# MEDIA_ROOT = BASE_DIR / 'media'
+
+INSTALLED_APPS += [
+    'cloudinary',
+    'cloudinary_storage',
+]
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+
+
+import cloudinary
+
+cloudinary.config( 
+  cloud_name = 'dqquwiorh',
+  api_key = '728259227986873',
+  api_secret = '91Rx59f6yk2oOrLVX0pgkYHvruA',
+
+)
+# CLOUDINARY_STORAGE = {
+#     'CLOUD_NAME': 'dqquwiorh',
+#     'API_KEY': '728259227986873',
+#     'API_SECRET': '91Rx59f6yk2oOrLVX0pgkYHvruA',
+# }
+
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "users/static"),
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -213,7 +240,8 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
 ]
 
 # Set the redirect URI for Google OAuth
-SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = 'http://localhost:5173/google-callback'
+#SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = 'http://localhost:5173/google-callback'
+
 
 # Social Auth pipeline
 SOCIAL_AUTH_PIPELINE = (
@@ -231,4 +259,8 @@ SOCIAL_AUTH_PIPELINE = (
 # Paystack Configuration
 PAYSTACK_SECRET_KEY = 'sk_test_fe7bf851dee22f191e4e9b5e30203636fb58beb8'  # Replace with your Paystack secret key
 PAYSTACK_PUBLIC_KEY = 'pk_test_e0945fecdba378d883c456ed97949fb8dfac93ed'  # Replace with your Paystack public key
-FRONTEND_URL = 'http://localhost:5173'  # Frontend URL for callbacks
+#FRONTEND_URL = 'http://localhost:5173'  # Frontend URL for callbacks
+FRONTEND_URL = 'http://127.0.0.1:8000'  # Frontend URL for callbacks
+
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = FRONTEND_URL + '/google-callback'
