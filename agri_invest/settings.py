@@ -45,6 +45,9 @@ INSTALLED_APPS = [
     'corsheaders',
     'djoser',
     'social_django',
+    'cloudinary',
+    'cloudinary_storage',
+    'whitenoise',
     # Local apps
     'users',
     'investments',
@@ -63,6 +66,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
 ROOT_URLCONF = 'agri_invest.urls'
@@ -136,10 +140,6 @@ STATIC_URL = 'static/'
 MEDIA_URL = '/media/'
 # MEDIA_ROOT = BASE_DIR / 'media'
 
-INSTALLED_APPS += [
-    'cloudinary',
-    'cloudinary_storage',
-]
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
@@ -147,20 +147,17 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 import cloudinary
 
 cloudinary.config( 
-  cloud_name = 'dqquwiorh',
-  api_key = '728259227986873',
-  api_secret = '91Rx59f6yk2oOrLVX0pgkYHvruA',
+  cloud_name = os.environ.get('cloud_name'),
+  api_key = os.environ.get('api_key'),
+  api_secret = os.environ.get('api_secret')
 
 )
-# CLOUDINARY_STORAGE = {
-#     'CLOUD_NAME': 'dqquwiorh',
-#     'API_KEY': '728259227986873',
-#     'API_SECRET': '91Rx59f6yk2oOrLVX0pgkYHvruA',
-# }
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "users/static"),
 ]
+
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
@@ -264,3 +261,11 @@ FRONTEND_URL = 'http://127.0.0.1:8000'  # Frontend URL for callbacks
 
 
 SOCIAL_AUTH_GOOGLE_OAUTH2_REDIRECT_URI = FRONTEND_URL + '/google-callback'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'DoNotReply <donotreplythismail34@gmail.com>'
+EMAIL_HOST_USER = 'donotreplythismail34@gmail.com'
+EMAIL_HOST_PASSWORD = os.environ.get('email_password')
